@@ -1,0 +1,53 @@
+use zen_class
+
+db.users.insertMany([
+  { name: "John Doe", email: "john.doe@example.com", password: "password1", role: "student", joined_date: ISODate("2022-01-01") },
+  { name: "Jane Smith", email: "jane.smith@example.com", password: "password2", role: "student", joined_date: ISODate("2022-01-02") },
+])
+
+db.codekata.insertMany([
+  { user_id: 1, problem_name: "Problem 1", language: "Python", timestamp: ISODate("2022-01-01T10:00:00Z") },
+  { user_id: 2, problem_name: "Problem 2", language: "Java", timestamp: ISODate("2022-01-02T11:30:00Z") },
+])
+
+db.attendance.insertMany([
+  { user_id: 1, session_date: ISODate("2022-01-01"), is_present: true },
+  { user_id: 2, session_date: ISODate("2020-10-17"), is_present: false },
+])
+
+db.topics.insertMany([
+  { topic_name: "Introduction to Programming" },
+  { topic_name: "Data Structures" },
+])
+
+db.tasks.insertMany([
+  { task_name: "Task 1", deadline: ISODate("2023-10-10"), assigned_to: 1, status: "submitted" },
+  { task_name: "Task 2", deadline: ISODate("2023-11-15"), assigned_to: 2, status: "not_submitted" },
+  { task_name: "Task 3", deadline: ISODate("2020-10-16"), assigned_to: 1, status: "not_submitted" },
+  { task_name: "Task 4", deadline: ISODate("2020-11-15"), assigned_to: 2, status: "not_submitted" },
+])
+
+db.company_drives.insertMany([
+  { drive_name: "Company A Drive", date: ISODate("2020-10-20"), participants: ["John Doe", "Jane Smith"] },
+  { drive_name: "Company B Drive", date: ISODate("2023-02-05"), participants: ["John Doe", "Jane Smith"] },
+])
+
+db.mentors.insertMany([
+  { name: "Mentor A", email: "mentorA@example.com", mentees: ["John Doe", "Jane Smith"] },
+  { name: "Mentor B", email: "mentorB@example.com", mentees: ["John Doe"] },
+])
+
+db.tasks.find({deadline: {$gte: ISODate("2023-10-01"), $lt: ISODate("2023-11-01")}})
+
+db.company_drives.find({date: {$gte: ISODate("2020-10-15"), $lte: ISODate("2020-10-31")}}).toArray()
+
+db.company_drives.find({})
+db.attendance.find({is_present: true})
+
+db.codekata.count({user_id: 1})
+
+db.mentors.find({ $where: "this.mentees.length > 15" })
+
+db.attendance.count({is_present: false, session_date: {$gte: ISODate("2020-10-15"), $lte: ISODate("2020-10-31")}})
+db.tasks.count({status: "not_submitted", deadline: {$gte: ISODate("2020-10-15"), $lte: ISODate("2020-10-31")}})
+
